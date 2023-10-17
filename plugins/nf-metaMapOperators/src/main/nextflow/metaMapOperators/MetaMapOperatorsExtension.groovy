@@ -8,9 +8,6 @@ import nextflow.Channel
 import nextflow.Session
 import nextflow.extension.CH
 import nextflow.extension.DataflowHelper
-import nextflow.extension.JoinOp
-import nextflow.extension.GroupTupleOp
-import nextflow.extension.CombineOp
 import nextflow.plugin.extension.Factory
 import nextflow.plugin.extension.Function
 import nextflow.plugin.extension.Operator
@@ -72,13 +69,8 @@ class metaMapOperatorsExtension extends PluginExtensionPoint {
     *
     */
     @Operator
-    DataflowWriteChannel groupTupleOnMetaKeys(DataflowReadChannel source) {
-        final target = CH.createBy(source)
-        // do meta manipulation
-        
-        final next = { target.bind("Goodbye $it".toString()) }
-        final done = { target.bind(Channel.STOP) }
-        DataflowHelper.subscribeImpl(source, [onNext: next, onComplete: done])
-        return target
+    DataflowWriteChannel groupTupleOnMetaKeys(final DataflowReadChannel source, final Map params=null) {
+        def result = new GroupTupleByMetaKeysOp(params, source).apply()
+        return result
     }
 }
