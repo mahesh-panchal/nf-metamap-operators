@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
-rootProject.name = 'nf-hello'
+rootProject.name = 'nf-metaMapOperators'
 include('plugins')
-include('plugins:nf-hello')
+include('plugins:nf-metaMapOperators')
+includeBuild('../nextflow')
