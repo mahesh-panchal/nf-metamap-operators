@@ -6,6 +6,7 @@ import groovy.util.logging.Slf4j
 import groovyx.gpars.dataflow.DataflowReadChannel
 import groovyx.gpars.dataflow.DataflowWriteChannel
 import nextflow.Channel
+import nextflow.extension.GroupKey
 import nextflow.util.ArrayBag
 import nextflow.util.CacheHelper
 import nextflow.util.CheckHelper
@@ -64,7 +65,7 @@ class GroupTupleByMetaKeysOp {
         defineComparator()
     }
 
-    GroupTupleOp setTarget(DataflowWriteChannel target) {
+    GroupTupleByMetaKeysOp setTarget(DataflowWriteChannel target) {
         this.target = target
         return this
     }
@@ -72,7 +73,7 @@ class GroupTupleByMetaKeysOp {
     static private List<String> getMetaKeys( Map params ) {
         if( params?.by == null )
             throw new IllegalArgumentException("Not a valid `keys` value for `groupTupleOnMetaKeys` operator: '${params.keys}' -- It must be a string or a list of strings defining keys in the meta map")
-        if( params.by instance of List )
+        if( params.by instanceof List )
             return params.by as List<String>
         if( params.by instanceof String || params.by.toString() )
             return [ params.by as String ]

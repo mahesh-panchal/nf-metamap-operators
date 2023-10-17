@@ -36,32 +36,6 @@ class metaMapOperatorsExtension extends PluginExtensionPoint {
     @Override
     protected void init(Session session) {
         this.session = session
-        this.config = new HelloConfig(session.config.navigate('hello') as Map)
-    }
-
-    /*
-    * {@code goodbye} is a *consumer* method as it receives values from a channel to perform some logic.
-    *
-    * Consumer methods are introspected by nextflow-core and include into the DSL if the method:
-    *
-    * - it's public
-    * - it returns a DataflowWriteChannel
-    * - it has only one arguments of DataflowReadChannel class
-    * - it's marked with the @Operator annotation 
-    *
-    * a consumer method needs to proportionate 2 closures:
-    * - a closure to consume items (one by one)
-    * - a finalizer closure
-    *
-    * in this case `goodbye` will consume a message and will store it as an upper case
-    */
-    @Operator
-    DataflowWriteChannel goodbye(DataflowReadChannel source) {
-        final target = CH.createBy(source)
-        final next = { target.bind("Goodbye $it".toString()) }
-        final done = { target.bind(Channel.STOP) }
-        DataflowHelper.subscribeImpl(source, [onNext: next, onComplete: done])
-        return target
     }
 
     /*
