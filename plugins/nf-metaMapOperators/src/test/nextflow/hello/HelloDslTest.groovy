@@ -1,4 +1,4 @@
-package nextflow.hello
+package nextflow.metaMapOperators
 
 import nextflow.Channel
 import nextflow.plugin.Plugins

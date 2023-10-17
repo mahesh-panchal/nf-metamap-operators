@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
-package nextflow.hello
+package nextflow.metaMapOperators
 
-import groovy.transform.CompileStatic
 import nextflow.Session
-import nextflow.trace.TraceObserver
-import nextflow.trace.TraceObserverFactory
+import spock.lang.Specification
+
 /**
- * Implements the validation observer factory
  *
  * @author Paolo Di Tommaso <paolo.ditommaso@gmail.com>
  */
-@CompileStatic
-class HelloFactory implements TraceObserverFactory {
+class HelloFactoryTest extends Specification {
 
-    @Override
-    Collection<TraceObserver> create(Session session) {
-        final result = new ArrayList()
-        result.add( new HelloObserver() )
-        return result
+    def 'should return observer' () {
+        when:
+        def result = new HelloFactory().create(Mock(Session))
+        then:
+        result.size()==1
+        result[0] instanceof HelloObserver
     }
+
 }
