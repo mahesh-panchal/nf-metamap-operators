@@ -22,7 +22,7 @@ import nextflow.plugin.extension.PluginExtensionPoint
  */
 @Slf4j
 @CompileStatic
-class metaMapOperatorsExtension extends PluginExtensionPoint {
+class MetaMapOperatorsExtension extends PluginExtensionPoint {
 
     /*
      * A session hold information about current execution of the script

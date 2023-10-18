@@ -27,9 +27,9 @@ import org.pf4j.PluginWrapper
  * @author Mahesh Binzer-Panchal <mahesh.binzer-panchal@scilifelab.se>
  */
 @CompileStatic
-class metaMapOperatorsPlugin extends BasePlugin {
+class MetaMapOperatorsPlugin extends BasePlugin {
 
-    metaMapOperatorsPlugin(PluginWrapper wrapper) {
+    MetaMapOperatorsPlugin(PluginWrapper wrapper) {
         super(wrapper)
     }
 }
