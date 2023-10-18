@@ -14,6 +14,8 @@ import nextflow.util.CheckHelper
  * Implements {@link OperatorImpl#groupTuple} operator logic
  *
  * @author Mahesh Binzer-Panchal <mahesh.binzer-panchal@scilifelab.se>
+ *
+ * Adapted from the GroupTupleOp by
  * @author Paolo Di Tommaso <paolo.ditommaso@gmail.com>
  */
 @Slf4j
