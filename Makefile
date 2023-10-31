@@ -1,5 +1,6 @@
 
 config ?= compileClasspath
+version ?= $(shell grep 'Plugin-Version' plugins/nf-metaMapOperators/src/resources/META-INF/MANIFEST.MF | awk '{ print $$2 }')
 
 ifdef module 
 mm = :${module}:
@@ -50,6 +51,11 @@ endif
 #
 buildPlugins:
 	./gradlew copyPluginZip
+
+install:
+	./gradlew copyPluginZip
+	rm -rf ${HOME}/.nextflow/plugins/nf-metaMapOperators-${version}
+	cp -r build/plugins/nf-metaMapOperators-${version} ${HOME}/.nextflow/plugins/
 
 #
 # Upload JAR artifacts to Maven Central
