@@ -63,7 +63,7 @@ To build and test the plugin during development, configure a local Nextflow buil
 
 1. Clone the Nextflow repository in your computer into a sibling directory:
     ```bash
-    git clone --depth 1 https://github.com/nextflow-io/nextflow ../nextflow
+    git clone --depth 1 --branch v23.10.0 https://github.com/nextflow-io/nextflow ../nextflow
     ```
   
 2. Configure the plugin build to use the local Nextflow code:
@@ -80,7 +80,7 @@ To build and test the plugin during development, configure a local Nextflow buil
 
 4. Run Nextflow with the plugin, using `./launch.sh` as a drop-in replacement for the `nextflow` command, and adding the option `-plugins nf-hello` to load the plugin:
     ```bash
-    ./launch.sh run nextflow-io/hello -plugins nf-hello
+    ./launch.sh run -r main mahesh-panchal/nf-core_metamap-management-poc -plugins nf-metaMapOperators -entry GROUPTUPLEONKEYS
     ```
 
 ## Testing without Nextflow build
