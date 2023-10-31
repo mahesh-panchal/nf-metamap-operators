@@ -1,2 +1,3 @@
 additionalRepositories:
-  - url: https://github.com/nextflow-io/nextflow
+  # - url: https://github.com/nextflow-io/nextflow
+  - url: https://github.com/mahesh-panchal/nf-core_metamap-management-poc
