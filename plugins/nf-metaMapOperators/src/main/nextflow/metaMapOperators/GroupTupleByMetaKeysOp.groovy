@@ -1,4 +1,4 @@
-// Derived from https://github.com/nextflow-io/nextflow/blob/master/modules/nextflow/src/main/groovy/nextflow/extension/GroupTupleOp.groovy
+// Adapted from https://github.com/nextflow-io/nextflow/blob/master/modules/nextflow/src/main/groovy/nextflow/extension/GroupTupleOp.groovy
 
 package nextflow.metaMapOperators
 
@@ -6,13 +6,13 @@ import groovy.util.logging.Slf4j
 import groovyx.gpars.dataflow.DataflowReadChannel
 import groovyx.gpars.dataflow.DataflowWriteChannel
 import nextflow.Channel
+import nextflow.extension.CH
+import nextflow.extension.DataflowHelper
 import nextflow.extension.GroupKey
 import nextflow.util.ArrayBag
 import nextflow.util.CacheHelper
 import nextflow.util.CheckHelper
 /**
- * Implements {@link OperatorImpl#groupTuple} operator logic
- *
  * @author Mahesh Binzer-Panchal <mahesh.binzer-panchal@scilifelab.se>
  *
  * Adapted from the GroupTupleOp by
@@ -29,7 +29,7 @@ class GroupTupleByMetaKeysOp {
         keys: [String, List] 
     ]
 
-    static private List<Integer> GROUP_DEFAULT_INDEX = 0
+    static private Integer GROUP_DEFAULT_INDEX = 0
 
 
     /**
@@ -73,12 +73,12 @@ class GroupTupleByMetaKeysOp {
     }
 
     static private List<String> getMetaKeys( Map params ) {
-        if( params?.by == null )
+        if( params?.keys == null )
             throw new IllegalArgumentException("Not a valid `keys` value for `groupTupleOnMetaKeys` operator: '${params.keys}' -- It must be a string or a list of strings defining keys in the meta map")
-        if( params.by instanceof List )
-            return params.by as List<String>
-        if( params.by instanceof String || params.by.toString() )
-            return [ params.by as String ]
+        if( params.keys instanceof List )
+            return params.keys as List<String>
+        if( params.keys instanceof String || params.keys.toString() )
+            return [ params.keys as String ]
 
         throw new IllegalArgumentException("Not a valid `keys` value for `groupTupleOnMetaKeys` operator: '${params.keys}' -- It must be a string or a list of strings defining keys in the meta map")
 
@@ -100,14 +100,15 @@ class GroupTupleByMetaKeysOp {
      */
     private void collect(List tuple) {
 
-        final key = tuple[index].subMap(metaKeys).values() // the actual grouping key
-        final len = tuple.size() 
+        // TODO: Make work with GroupKey object
+        // TODO: What should the behaviour be for the other keys? Current, drop anything but the meta keys.
+        final key = [ tuple[index].subMap(metaKeys) ]   // the actual grouping key
+        final len = tuple.size()
 
-        // groups is a map. The { ... } is a closure. This returns a List w. key??
         final List items = groups.getOrCreate(key) {    // get the group for the specified key
             def result = new ArrayList(len)             // create if does not exists
-            for( int i=0; i<len; i++ )                  // maintains the position of the meta map in the tuple
-                result[i] = (i == index ? tuple[i] : new ArrayBag()) 
+            for( int i=0; i<len; i++ )
+                result[i] = (i == index ? tuple[i].subMap(metaKeys) : new ArrayBag()) 
             return result
         }
 
@@ -115,12 +116,14 @@ class GroupTupleByMetaKeysOp {
         for( int i=0; i<len; i++ ) {                    // append the values in the tuple
             if( i != index ) {
                 def list = (items[i] as List)
-                if( list==null ) { // QUESTION: Is this redundant with the setting of the new ArrayBag() above?
+                if( list==null ) {
                     list = new ArrayBag()
                     items.add(i, list)
                 }
                 list.add( tuple[i] )
                 count=list.size()
+            } else {
+                // TODO: Change behaviour of returned meta map? Current, return subMap of meta keys
             }
         }
 
@@ -130,7 +133,6 @@ class GroupTupleByMetaKeysOp {
             groups.remove(key)
         }
     }
-
 
     /*
      * finalize the grouping binding the remaining values
@@ -263,5 +265,4 @@ class GroupTupleByMetaKeysOp {
         else
             return 0
     }
-
 }
