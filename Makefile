@@ -55,6 +55,7 @@ buildPlugins:
 install:
 	./gradlew copyPluginZip
 	rm -rf ${HOME}/.nextflow/plugins/nf-metaMapOperators-${version}
+	mkdir -p ${HOME}/.nextflow/plugins/
 	cp -r build/plugins/nf-metaMapOperators-${version} ${HOME}/.nextflow/plugins/
 
 #
