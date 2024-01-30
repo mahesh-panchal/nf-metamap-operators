@@ -1,3 +1,34 @@
+# nf-core meta map operators
+
+Developing on the `dev` branch.
+
+Only the `groupTuple` equivalent has been implemented. 
+
+Abandoning in favour of custom functions:
+```nextflow
+include { dropMeta } from 'modules/custom_functions'
+```
+```nextflow
+def dropMeta( channel ){
+    channel.map { it[1] }
+}
+
+// Rough idea of the other two
+// Need to define better what happens to meta map
+def combineByMetaKeys( Map args = [:], lhs, rhs, keys ){
+    lhs.map{ [ it[0].subMap(keys) ] + it }
+        .combine( args + [ by: 0 ], rhs.map{ [ it[0].subMap(keys) ] + it.tail() } )
+        .map { it.tail() }
+}
+
+def joinByMetaKeys( Map args = [:], lhs, rhs, keys ) {
+    lhs.map{ [ it[0].subMap(keys) ] + it }
+        .join( args + [ by: 0 ], rhs.map{ [ it[0].subMap(keys) ] + it.tail() } )
+        .map{ it.tail() }
+}
+
+```
+
 # nf-hello plugin 
  
 This project contains a simple Nextflow plugin called `nf-hello` which provides examples of different plugin extensions:
